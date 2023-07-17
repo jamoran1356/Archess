@@ -1,3 +1,6 @@
+import NonFungibleToken from "./NonFungibleToken.cdc"
+import MetadataViews from "./MetadataViews.cdc"
+
 
 access(all) contract ArChess {
 
@@ -9,6 +12,29 @@ access(all) contract ArChess {
     self.tokenURI = _tokenURI
     return self.tokenURI
   } 
+
+  //Estructura para representar a un jugador
+  pub resource Player {
+    pub var wallet: Address
+    pub var experience: UInt64
+    pub var level: UInt32
+    pub var pieces: @[Piece] //invalid resource field in structure: `pieces`
+    pub var sets: @[Set] //invalid resource field in structure: `sets`
+    
+    init(_wallet: Address){
+      self.wallet = _wallet
+      self.experience = 0
+      self.level = 0
+      self.pieces <- []
+      self.sets <- []
+    }
+
+    destroy() {
+      destroy self.pieces
+      destroy self.sets
+    }
+
+  }
 
   // Estructura para representar una pieza de ajedrez
   pub resource Piece {
@@ -56,7 +82,7 @@ access(all) contract ArChess {
     }
 
   }
-  
+   
   pub resource Set {
     pub let id: UInt64
     pub let pieces: @[Piece]
@@ -69,10 +95,10 @@ access(all) contract ArChess {
 
   access(account) fun createPieces(): @[Piece] {
     var pieces: @[Piece] <- []
-    var i: UFix64 = 0.00
-    while i < 0.16 {
+    var i: UInt64 = 0
+    while i < 16 {
       pieces.append(<- create Piece())
-      i = i + 0.01
+      i = i + 1
     }
     return <- pieces
   }
@@ -96,10 +122,10 @@ access(all) contract ArChess {
 
   access(account) fun createSets(): @[Set] {
     var sets: @[Set] <- []
-    var i: UFix64 = 0.00
-    while i < 0.4999 {
+    var i: UInt = 0
+    while i < 5000 {
       sets.append(<- create Set())
-      i = i + 0.01
+      i = i + 1
     }
     return <- sets
   }
@@ -114,6 +140,21 @@ access(all) contract ArChess {
     return <- create Pack()
   }
 
+  
+access(all) fun getAccountCollection(billetera: Address): Int? {
+    let account = getAccount(billetera)
+    let capability = account.getCapability<&{NonFungibleToken.CollectionPublic}>(
+        /public/ArChessCollection
+    )
+    if capability == nil {
+        return 0
+    }
+    
+    let collection = capability.borrow()
+    let sets = collection?.getIDs()
+    return sets?.length
+}
+
   init() {
     self.totalSupply = 0
     self.tokenURI = "https://ArChess.club/assets/NFT/collection/"
@@ -121,4 +162,3 @@ access(all) contract ArChess {
   }
   
 }
-
