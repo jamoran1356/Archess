@@ -6,9 +6,8 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"contracts":{
-		"FunfibleToken":"./contracts/FungibleToken.cdc",
-		"NonFunfibleToken":"./contracts/NonFungibleToken.cdc",
-		"MetadataViews":"./contracts/MetadataViews.cdc", 
+		"FungibleToken": "./contracts/FungibleToken.cdc",
+		"MetadataViews": "./contracts/MetadataViews.cdc",
 		"ArChess": "./contracts/archess.cdc" 
 
 	},
@@ -32,7 +31,6 @@
 		"testnet": {
 			"testnet-account":[
 				"FungibleToken",
-				"NonFunfibleToken",
 				"MetadataViews",
 				"ArChess"
 			]
