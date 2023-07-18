@@ -6,10 +6,7 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"contracts":{
-		"FungibleToken": "./contracts/FungibleToken.cdc",
-		"MetadataViews": "./contracts/MetadataViews.cdc",
-		"ArChess": "./contracts/archess.cdc" 
-
+		"archess_v01": "./contracts/archess_v01.cdc" 
 	},
 	"accounts": {
 		"emulator-account": {
@@ -30,9 +27,7 @@
 	"deployments": {
 		"testnet": {
 			"testnet-account":[
-				"FungibleToken",
-				"MetadataViews",
-				"ArChess"
+				"archess_v01"
 			]
 		}
 	}
